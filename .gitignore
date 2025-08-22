@@ -1,0 +1,18 @@
+# secrets
+docker/keys/
+.kaggle/
+
+# env
+.env
+*.env
+
+# python
+__pycache__/
+*.py[cod]
+
+# airflow logs 
+docker/logs/
+
+# os/editor
+.DS_Store
+*.swp

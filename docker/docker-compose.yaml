@@ -1,5 +1,4 @@
 services:
- 
   postgres:
     image: postgres:14
     environment:
@@ -15,23 +14,27 @@ services:
       start_period: 5s
     restart: always
 
- 
   airflow-init:
-    image: apache/airflow:2.9.3
+    image: airflow:2.9.3-gcp-kaggle
     depends_on:
       postgres:
         condition: service_healthy
-
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
-      _AIRFLOW_DB_MIGRATE: 'true'       
+      _AIRFLOW_DB_MIGRATE: 'true'
       _AIRFLOW_WWW_USER_CREATE: 'true'
       _AIRFLOW_WWW_USER_USERNAME: 'airflow'
       _AIRFLOW_WWW_USER_PASSWORD: 'airflow'
+      GOOGLE_APPLICATION_CREDENTIALS: "/opt/airflow/keys/gcp.json"
+      KAGGLE_CONFIG_DIR: "/opt/airflow/.kaggle"
+      GCS_BUCKET: stock-data-bucket-hyem
+    
     volumes:
       - ./dags:/opt/airflow/dags
       - ./config:/opt/airflow/config
+      - ./keys:/opt/airflow/keys:ro
+      - ~/.kaggle:/opt/airflow/.kaggle:ro
     command: >
       bash -lc 'airflow db migrate &&
       airflow users create \
@@ -41,45 +44,58 @@ services:
         --lastname airflow \
         --role Admin \
         --email hsy13467926@gmail.com || true'
-
     restart: "no"
 
-
   airflow-webserver:
-    image: apache/airflow:2.9.3
+    image: airflow:2.9.3-gcp-kaggle
     depends_on:
       postgres:
         condition: service_healthy
+      airflow-init:
+        condition: service_completed_successfully
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
       AIRFLOW__WEBSERVER__WEB_SERVER_PORT: "8080"
+      GOOGLE_APPLICATION_CREDENTIALS: "/opt/airflow/keys/gcp.json"
+      KAGGLE_CONFIG_DIR: "/opt/airflow/.kaggle"
+      GCS_BUCKET: stock-data-bucket-hyem
 
     ports:
       - "8080:8080"
     volumes:
       - ./dags:/opt/airflow/dags
-      - airflow-logs:/opt/airflow/logs        
-      - airflow-plugins:/opt/airflow/plugins   
+      - airflow-logs:/opt/airflow/logs
+      - airflow-plugins:/opt/airflow/plugins
       - ./config:/opt/airflow/config
+      - ./keys:/opt/airflow/keys:ro
+      - ~/.kaggle:/opt/airflow/.kaggle:ro
+  
     command: webserver
     restart: always
 
   airflow-scheduler:
-    image: apache/airflow:2.9.3
+    image: airflow:2.9.3-gcp-kaggle
     depends_on:
-        postgres:
-          condition: service_healthy
+      postgres:
+        condition: service_healthy
+      airflow-init:
+        condition: service_completed_successfully
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      GOOGLE_APPLICATION_CREDENTIALS: "/opt/airflow/keys/gcp.json"
+      KAGGLE_CONFIG_DIR: "/opt/airflow/.kaggle"
+      GCS_BUCKET: stock-data-bucket-hyem
     volumes:
       - ./dags:/opt/airflow/dags
       - airflow-logs:/opt/airflow/logs
       - airflow-plugins:/opt/airflow/plugins
       - ./config:/opt/airflow/config
+      - ./keys:/opt/airflow/keys:ro
+      - ~/.kaggle:/opt/airflow/.kaggle:ro
     command: scheduler
     restart: always
 
