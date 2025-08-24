@@ -34,7 +34,7 @@ services:
       - ./dags:/opt/airflow/dags
       - ./config:/opt/airflow/config
       - ./keys:/opt/airflow/keys:ro
-      - ~/.kaggle:/opt/airflow/.kaggle:ro
+      - ${HOME}/.kaggle:/opt/airflow/.kaggle:ro
     command: >
       bash -lc 'airflow db migrate &&
       airflow users create \
@@ -70,7 +70,7 @@ services:
       - airflow-plugins:/opt/airflow/plugins
       - ./config:/opt/airflow/config
       - ./keys:/opt/airflow/keys:ro
-      - ~/.kaggle:/opt/airflow/.kaggle:ro
+      - ${HOME}/.kaggle:/opt/airflow/.kaggle:ro
   
     command: webserver
     restart: always
@@ -95,7 +95,7 @@ services:
       - airflow-plugins:/opt/airflow/plugins
       - ./config:/opt/airflow/config
       - ./keys:/opt/airflow/keys:ro
-      - ~/.kaggle:/opt/airflow/.kaggle:ro
+      - ${HOME}/.kaggle:/opt/airflow/.kaggle:ro
     command: scheduler
     restart: always
 
