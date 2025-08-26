@@ -47,4 +47,4 @@ select
               LAG(eom_close) OVER (partition by ticker order by month_label)) - 1
     as monthly_return
 from eom_price
-order by ticker, month_label;
+order by ticker, month_label

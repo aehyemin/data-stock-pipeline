@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: monthly_returns
+    description: "전월말 대비 월간 수익률"
+    columns:
+      - name: ticker
+        description: "티커"
+        tests: [not_null]
+      - name: month_label
+        description: "월 라벨"
+        tests: [not_null]
+      - name: eom_date
+        description: "해당 월의 마지막 거래일"
+        tests: [not_null]
+      - name: eom_close
+        description: "마지막 거래일 종가"
