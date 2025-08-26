@@ -2,15 +2,19 @@
 
 
 ## 1. 프로젝트 개요
-- ***목표***: 미국 주식/ETF 가격 데이터를 수집, 적재, 정제하여 분석 가능하도록 제공
+- **목표**: 미국 주식/ETF 가격 데이터를 수집, 적재, 정제하여 분석 가능하도록 제공
 
 
 ## 2.  프로젝트 스택
 
+<img width="896" height="547" alt="Screenshot from 2025-08-26 20-20-26" src="https://github.com/user-attachments/assets/1b340e04-561c-409e-b7e4-21bc03434c06" />
+
+
+
 1. **데이터 소스**
      - Kaggle의 데이터셋 활용. https://www.kaggle.com/datasets/borismarjanovic/price-volume-data-for-all-us-stocks-etfs
      - ETF/Stock의 `Date`, `Open`, `Close`, `Volume`, `OpenInt` 데이터 활용
-     - 
+       
 2. **Ingestion & Orchestration(Airflow)**
     - DAG를 사용해 Kaggle -> GCS -> BigQuery 적재 자동화
     - `kaggle_to_gcs`: Kaggle 데이터셋을 GCS에 적재
@@ -35,4 +39,8 @@
 
 6. **Visualization(Tableau)**
    - 특정 티커의 월간 수익률 비교 차트
-   - Tableau Server에서 BigQuery 테이블을 데이터 소스로 연결  
+   - Tableau Server에서 BigQuery 테이블을 데이터 소스로 연결
+  
+
+
+
