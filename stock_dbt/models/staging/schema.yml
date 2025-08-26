@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: stocks_silver
+    database: stock-data-pipeline-469713
+    schema: stocks_silver
+    tables:
+      - name: silver_table
+
+      
