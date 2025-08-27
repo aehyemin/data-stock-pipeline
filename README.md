@@ -42,5 +42,6 @@
    - Tableau Server에서 BigQuery 테이블을 데이터 소스로 연결
   
 
+<img width="966" height="495" alt="image" src="https://github.com/user-attachments/assets/0a1295a2-6b1e-4061-a494-48326725e7df" />
 
 
